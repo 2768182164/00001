@@ -2,19 +2,19 @@
   <div class="wallet-connect">
     <div v-if="!walletStore.isConnected" class="connect-box">
       <van-button type="primary" size="large" :loading="walletStore.isConnecting" @click="connect">
-        {{ walletStore.isConnecting ? '连接中...' : '连接钱包' }}
+        {{ walletStore.isConnecting ? t('wallet.connecting') : t('wallet.connect') }}
       </van-button>
       <p v-if="errorMsg" style="color: #f00; margin-top: 10px;">{{ errorMsg }}</p>
     </div>
 
     <div v-else class="wallet-info">
       <van-cell-group inset>
-        <van-cell title="地址" :value="walletStore.shortAddress" is-link @click="copyAddress" />
-        <van-cell title="余额" :value="walletStore.balance + ' TRX'" />
+        <van-cell :title="t('wallet.address')" :value="walletStore.shortAddress" is-link @click="copyAddress" />
+        <van-cell :title="t('wallet.balance')" :value="walletStore.balance + ' TRX'" />
       </van-cell-group>
       <div style="margin-top: 10px;"></div>
       <van-button type="danger" size="large" block @click="handleDisconnect">
-        断开连接
+        {{ t('wallet.disconnect') }}
       </van-button>
     </div>
   </div>
@@ -22,8 +22,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useWalletStore } from '../stores/wallet';
 
+const { t } = useI18n();
 const walletStore = useWalletStore();
 const errorMsg = ref('');
 
@@ -33,7 +35,8 @@ async function connect() {
 
   const provider = window.tronLink;
   if (!provider) {
-    errorMsg.value = '请先安装 TronLink 钱包';
+    errorMsg.value = t('wallet.notInstalled');
+    walletStore.isConnecting = false;
     return;
   }
 
@@ -54,10 +57,10 @@ async function connect() {
         walletStore.balance = String(provider.tronWeb.fromSun(balance));
       }
     } else {
-      errorMsg.value = '获取地址失败';
+      errorMsg.value = t('wallet.getAddressFailed');
     }
   } catch (e) {
-    errorMsg.value = e.message || '连接失败';
+    errorMsg.value = e.message || t('wallet.connectFailed');
   }
 
   walletStore.isConnecting = false;

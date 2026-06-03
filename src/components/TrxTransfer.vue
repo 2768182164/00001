@@ -3,15 +3,15 @@
     <van-cell-group inset>
       <van-field
         v-model="toAddress"
-        label="收款地址"
-        placeholder="请输入 TRON 地址"
+        :label="t('trx.toAddress')"
+        :placeholder="t('trx.toAddressPlaceholder')"
         :error-message="addressError"
       />
       <van-field
         v-model.number="amount"
-        label="转账金额"
+        :label="t('trx.amount')"
         type="number"
-        placeholder="请输入 TRX 数量"
+        :placeholder="t('trx.amountPlaceholder')"
         :error-message="amountError"
       />
     </van-cell-group>
@@ -24,24 +24,24 @@
         :disabled="!canTransfer"
         @click="showConfirmDialog"
       >
-        {{ waitingConfirm ? '等待确认...' : (isSending ? '转账中...' : '确认转账') }}
+        {{ waitingConfirm ? t('common.waiting') : (isSending ? t('trx.transferring') : t('trx.confirmTransfer')) }}
       </van-button>
     </div>
 
     <p v-if="error" style="color: #f00; margin-top: 10px;">{{ error }}</p>
 
     <!-- 确认弹窗 -->
-    <van-dialog v-model:show="showConfirm" title="确认转账" show-cancel-button @confirm="doTransfer">
+    <van-dialog v-model:show="showConfirm" :title="t('trx.confirmTransfer')" show-cancel-button @confirm="doTransfer">
       <p style="padding: 20px; text-align: center;">
         <van-icon name="warning" color="#ff976a" size="40" />
         <p style="margin-top: 10px;">
-          转账 {{ amount }} TRX 给 {{ shortToAddress }}
+          {{ t('trx.transferTo', { amount, address: shortToAddress }) }}
         </p>
       </p>
     </van-dialog>
 
     <!-- 结果弹窗 -->
-    <van-dialog v-model:show="showResult" :title="txHash ? '转账成功' : '转账失败'">
+    <van-dialog v-model:show="showResult" :title="txHash ? t('trx.transferSuccess') : t('trx.transferFailed')">
       <div style="padding: 20px; text-align: center;">
         <van-icon v-if="txHash" name="checked" color="#07c160" size="40" />
         <van-icon v-else name="cross" color="#f00" size="40" />
@@ -54,7 +54,7 @@
         </p>
 
         <van-button v-if="txHash" type="primary" size="small" style="margin-top: 10px;" @click="openExplorer">
-          在浏览器查看
+          {{ t('trx.viewInExplorer') }}
         </van-button>
       </div>
     </van-dialog>
@@ -63,10 +63,12 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { isValidAddress, toSun } from '../utils/tron';
 import { useWalletStore } from '../stores/wallet';
 import { useTrxTransfer } from '../composables/useTrxTransfer';
 
+const { t } = useI18n();
 const walletStore = useWalletStore();
 const { isSending, txHash, error, transfer } = useTrxTransfer();
 
@@ -78,12 +80,12 @@ const waitingConfirm = ref(false);
 
 const addressError = computed(() => {
   if (!toAddress.value) return '';
-  return isValidAddress(toAddress.value) ? '' : '无效的 TRON 地址';
+  return isValidAddress(toAddress.value) ? '' : t('trx.invalidAddress');
 });
 
 const amountError = computed(() => {
   if (!amount.value) return '';
-  return amount.value > 0 ? '' : '金额必须大于 0';
+  return amount.value > 0 ? '' : t('trx.amountMustBePositive');
 });
 
 const canTransfer = computed(() => {

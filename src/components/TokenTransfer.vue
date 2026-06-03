@@ -1,34 +1,34 @@
 <template>
   <div class="token-transfer">
     <van-tabs v-model:active="activeTab">
-      <van-tab title="代币转账">
+      <van-tab :title="t('token.transferTab')">
         <van-cell-group inset>
           <van-field
             v-model="tokenAddress"
-            label="代币合约"
-            placeholder="输入代币合约地址"
+            :label="t('token.contractAddress')"
+            :placeholder="t('token.contractPlaceholder')"
             :error-message="tokenError"
           />
-          <van-cell title="代币名称" :value="tokenInfo.name || '-'" />
-          <van-cell title="代币符号" :value="tokenInfo.symbol || '-'" />
-          <van-cell title="精度" :value="tokenInfo.decimals?.toString() || '-'" />
-          <van-cell title="余额" :value="tokenBalance" />
+          <van-cell :title="t('token.tokenName')" :value="tokenInfo.name || '-'" />
+          <van-cell :title="t('token.tokenSymbol')" :value="tokenInfo.symbol || '-'" />
+          <van-cell :title="t('token.decimals')" :value="tokenInfo.decimals?.toString() || '-'" />
+          <van-cell :title="t('token.balance')" :value="tokenBalance" />
           <van-field
             v-model="toAddress"
-            label="收款地址"
-            placeholder="输入 TRON 地址"
+            :label="t('token.toAddress')"
+            :placeholder="t('token.toAddressPlaceholder')"
             :error-message="addressError"
           />
           <van-field
             v-model.number="amount"
-            label="转账数量"
+            :label="t('token.amount')"
             type="number"
-            placeholder="输入数量"
+            :placeholder="t('token.amountPlaceholder')"
           />
         </van-cell-group>
 
         <div class="action-btns">
-          <van-button size="small" @click="queryBalance">查询余额</van-button>
+          <van-button size="small" @click="queryBalance">{{ t('token.queryBalance') }}</van-button>
           <van-button
             type="primary"
             size="large"
@@ -36,14 +36,14 @@
             :disabled="!canTransfer"
             @click="showConfirmDialog"
           >
-            {{ waitingConfirm ? '等待确认...' : (isSending ? '转账中...' : '确认转账') }}
+            {{ waitingConfirm ? t('common.waiting') : (isSending ? t('token.transferring') : t('token.confirmTransfer')) }}
           </van-button>
         </div>
 
         <p v-if="error" style="color: #f00; margin-top: 10px;">{{ error }}</p>
       </van-tab>
 
-      <van-tab title="代币管理">
+      <van-tab :title="t('token.manageTab')">
         <van-cell-group inset>
           <van-cell
             v-for="token in savedTokens"
@@ -54,24 +54,22 @@
             @click="selectToken(token)"
           />
         </van-cell-group>
-        <van-button type="primary" block @click="showAddTokenDialog = true">添加代币</van-button>
+        <van-button type="primary" block @click="showAddTokenDialog = true">{{ t('token.addToken') }}</van-button>
       </van-tab>
     </van-tabs>
 
     <!-- 确认弹窗 -->
-    <van-dialog v-model:show="showConfirm" title="确认转账" show-cancel-button @confirm="doTransfer">
+    <van-dialog v-model:show="showConfirm" :title="t('token.confirmTransfer')" show-cancel-button @confirm="doTransfer">
       <p style="padding: 20px; text-align: center;">
         <van-icon name="warning" color="#ff976a" size="40" />
-        <p style="margin-top: 10px; font-size: 14px;">
-          代币: {{ tokenInfo.symbol }}<br/>
-          数量: {{ amount }}<br/>
-          给: {{ shortToAddress }}
+        <p style="margin-top: 10px; font-size: 14px; white-space: pre-line;">
+          {{ t('token.confirmInfo', { symbol: tokenInfo.symbol, amount, address: shortToAddress }) }}
         </p>
       </p>
     </van-dialog>
 
     <!-- 结果弹窗 -->
-    <van-dialog v-model:show="showResult" :title="txHash ? '转账成功' : '转账失败'">
+    <van-dialog v-model:show="showResult" :title="txHash ? t('trx.transferSuccess') : t('trx.transferFailed')">
       <div style="padding: 20px; text-align: center;">
         <van-icon v-if="txHash" name="checked" color="#07c160" size="40" />
         <van-icon v-else name="cross" color="#f00" size="40" />
@@ -84,24 +82,26 @@
         </p>
 
         <van-button v-if="txHash" type="primary" size="small" style="margin-top: 10px;" @click="openExplorer">
-          在浏览器查看
+          {{ t('trx.viewInExplorer') }}
         </van-button>
       </div>
     </van-dialog>
 
     <!-- 添加代币弹窗 -->
-    <van-dialog v-model:show="showAddTokenDialog" title="添加代币" show-cancel-button @confirm="addToken">
-      <van-field v-model="newTokenAddress" placeholder="输入代币合约地址" />
+    <van-dialog v-model:show="showAddTokenDialog" :title="t('token.addToken')" show-cancel-button @confirm="addToken">
+      <van-field v-model="newTokenAddress" :placeholder="t('token.addTokenPlaceholder')" />
     </van-dialog>
   </div>
 </template>
 
 <script setup>
 import { ref, reactive, computed, toRefs } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { isValidAddress } from '../utils/tron';
 import { useWalletStore } from '../stores/wallet';
 import { useTokenTransfer } from '../composables/useTokenTransfer';
 
+const { t } = useI18n();
 const walletStore = useWalletStore();
 const { isSending, txHash, error, getTokenBalance, getTokenInfo, transfer } = useTokenTransfer();
 
@@ -124,12 +124,12 @@ const tokenBalance = ref('-');
 
 const tokenError = computed(() => {
   if (!tokenAddress.value) return '';
-  return isValidAddress(tokenAddress.value) ? '' : '无效的合约地址';
+  return isValidAddress(tokenAddress.value) ? '' : t('token.invalidContract');
 });
 
 const addressError = computed(() => {
   if (!toAddress.value) return '';
-  return isValidAddress(toAddress.value) ? '' : '无效的地址';
+  return isValidAddress(toAddress.value) ? '' : t('token.invalidAddress');
 });
 
 const canTransfer = computed(() => {
@@ -163,7 +163,7 @@ function formatBalance(balance, decimals) {
 
 async function queryBalance() {
   if (!tokenAddress.value || !isValidAddress(tokenAddress.value)) return;
-  tokenBalance.value = '查询中...';
+  tokenBalance.value = t('token.querying');
   try {
     const info = await getTokenInfo(tokenAddress.value);
     if (info) {
@@ -172,8 +172,8 @@ async function queryBalance() {
       tokenBalance.value = formatBalance(rawBalance, tokenInfo.decimals);
     }
   } catch (e) {
-    console.error('查询余额失败:', e);
-    tokenBalance.value = '查询失败';
+    console.error('queryBalance failed:', e);
+    tokenBalance.value = t('token.queryFailed');
   }
 }
 
@@ -191,7 +191,6 @@ async function doTransfer() {
   waitingConfirm.value = false;
 
   if (!result) {
-    // 只有真正失败才显示错误弹窗
     if (error.value) {
       showResult.value = true;
     }
