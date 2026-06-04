@@ -1,0 +1,86 @@
+{
+  "app": {
+    "title": "TRON DApp",
+    "tabs": {
+      "wallet": "Wallet",
+      "trx": "TRX Transfer",
+      "token": "Token",
+      "contract": "Contract"
+    }
+  },
+  "common": {
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "success": "Success",
+    "failed": "Failed",
+    "waiting": "Waiting for confirmation...",
+    "sending": "Sending...",
+    "transferSuccess": "Transfer Success",
+    "transferFailed": "Transfer Failed",
+    "viewInExplorer": "View in Explorer"
+  },
+  "wallet": {
+    "connect": "Connect Wallet",
+    "connecting": "Connecting...",
+    "disconnect": "Disconnect",
+    "address": "Address",
+    "balance": "Balance",
+    "notInstalled": "Please install TronLink wallet first",
+    "getAddressFailed": "Failed to get address",
+    "connectFailed": "Connection failed"
+  },
+  "trx": {
+    "toAddress": "To Address",
+    "toAddressPlaceholder": "Enter TRON address",
+    "amount": "Amount",
+    "amountPlaceholder": "Enter TRX amount",
+    "confirmTransfer": "Confirm Transfer",
+    "transferring": "Transferring...",
+    "invalidAddress": "Invalid TRON address",
+    "amountMustBePositive": "Amount must be greater than 0",
+    "transferTo": "Transfer {amount} TRX to {address}"
+  },
+  "token": {
+    "transferTab": "Token Transfer",
+    "manageTab": "Token Management",
+    "contractAddress": "Token Contract",
+    "contractPlaceholder": "Enter token contract address",
+    "tokenName": "Token Name",
+    "tokenSymbol": "Token Symbol",
+    "decimals": "Decimals",
+    "balance": "Balance",
+    "toAddress": "To Address",
+    "toAddressPlaceholder": "Enter TRON address",
+    "amount": "Amount",
+    "amountPlaceholder": "Enter amount",
+    "queryBalance": "Query Balance",
+    "confirmTransfer": "Confirm Transfer",
+    "transferring": "Transferring...",
+    "invalidContract": "Invalid contract address",
+    "invalidAddress": "Invalid address",
+    "querying": "Querying...",
+    "queryFailed": "Query failed",
+    "addToken": "Add Token",
+    "addTokenPlaceholder": "Enter token contract address",
+    "confirmInfo": "Token: {symbol}\nAmount: {amount}\nTo: {address}"
+  },
+  "contract": {
+    "contractAddress": "Contract Address",
+    "contractPlaceholder": "Enter contract address",
+    "methodName": "Method Name",
+    "methodPlaceholder": "Enter method name to call",
+    "params": "Parameters",
+    "paramsPlaceholder": "JSON array format, e.g.: ['param1', 'param2']",
+    "callQuery": "Call Query",
+    "sendTransaction": "Send Transaction",
+    "result": "Result",
+    "error": "Error",
+    "invalidContract": "Invalid contract address"
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "zh": "中文"
+  }
+}

@@ -69,7 +69,7 @@
     </van-dialog>
 
     <!-- 结果弹窗 -->
-    <van-dialog v-model:show="showResult" :title="txHash ? t('trx.transferSuccess') : t('trx.transferFailed')">
+    <van-dialog v-model:show="showResult" :title="txHash ? t('common.transferSuccess') : t('common.transferFailed')">
       <div style="padding: 20px; text-align: center;">
         <van-icon v-if="txHash" name="checked" color="#07c160" size="40" />
         <van-icon v-else name="cross" color="#f00" size="40" />
@@ -82,7 +82,7 @@
         </p>
 
         <van-button v-if="txHash" type="primary" size="small" style="margin-top: 10px;" @click="openExplorer">
-          {{ t('trx.viewInExplorer') }}
+          {{ t('common.viewInExplorer') }}
         </van-button>
       </div>
     </van-dialog>
@@ -95,7 +95,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, toRefs } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { isValidAddress } from '../utils/tron';
 import { useWalletStore } from '../stores/wallet';
@@ -208,7 +208,7 @@ function openExplorer() {
 
 function selectToken(token) {
   tokenAddress.value = token.address;
-  const saved = savedTokens.value.find(t => t.address === token.address);
+  const saved = savedTokens.value.find(item => item.address === token.address);
   if (saved) {
     tokenInfo.symbol = saved.symbol;
   }

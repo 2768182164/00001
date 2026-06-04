@@ -26,8 +26,15 @@ function onLangConfirm({ selectedValues }) {
   <div class="app">
     <van-nav-bar :title="t('app.title')">
       <template #right>
-        <van-icon name="exchange" size="18" @click="showLangPicker = true" />
-        <span style="margin-left: 4px; font-size: 12px;">{{ t(`language.${locale}`) }}</span>
+        <button
+          type="button"
+          class="lang-switcher"
+          :aria-label="t('language.label')"
+          @click="showLangPicker = true"
+        >
+          <van-icon name="exchange" size="18" />
+          <span class="lang-switcher__label">{{ t(`language.${locale}`) }}</span>
+        </button>
       </template>
     </van-nav-bar>
 
@@ -71,5 +78,24 @@ body {
 .app {
   min-height: 100vh;
   background: #f5f5f5;
+}
+.lang-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.lang-switcher:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+.lang-switcher__label {
+  font-size: 12px;
+  line-height: 1;
 }
 </style>

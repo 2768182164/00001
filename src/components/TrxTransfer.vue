@@ -41,7 +41,7 @@
     </van-dialog>
 
     <!-- 结果弹窗 -->
-    <van-dialog v-model:show="showResult" :title="txHash ? t('trx.transferSuccess') : t('trx.transferFailed')">
+    <van-dialog v-model:show="showResult" :title="txHash ? t('common.transferSuccess') : t('common.transferFailed')">
       <div style="padding: 20px; text-align: center;">
         <van-icon v-if="txHash" name="checked" color="#07c160" size="40" />
         <van-icon v-else name="cross" color="#f00" size="40" />
@@ -54,7 +54,7 @@
         </p>
 
         <van-button v-if="txHash" type="primary" size="small" style="margin-top: 10px;" @click="openExplorer">
-          {{ t('trx.viewInExplorer') }}
+          {{ t('common.viewInExplorer') }}
         </van-button>
       </div>
     </van-dialog>
